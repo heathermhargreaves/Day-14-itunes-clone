@@ -4,9 +4,41 @@ angular.module('itunes').service('itunesService', function($http, $q){
 
   //Write a method that accepts an artist's name as the parameter, then makes a 'JSONP' http request to a url that looks like this
   //https://itunes.apple.com/search?term=' + artist + '&callback=JSON_CALLBACK'
-  //Note that in the above line, artist is the parameter being passed in. 
+  //Note that in the above line, artist is the parameter being passed in.
   //You can return the http request or you can make your own promise in order to manipulate the data before you resolve it.
 
     //Code here
-    
-});
+    this.getArtist = function(artist) {
+      var defer = $q.defer();
+      $http({
+        method: 'JSONP',
+        url: 'https://itunes.apple.com/search?term=' + artist + '&callback=JSON_CALLBACK'
+      }).then(function(response) {
+        console.log(response);
+        var result = response.data.results;
+        var formattedResult = [];
+
+        for(var n in result) {
+          formattedResult.push(new formattedArtist(result[n]));
+        }
+
+        defer.resolve(formattedResult);
+      });
+      return defer.promise;
+};
+
+  var formattedArtist = function(artistInfo) {
+    this.AlbumArt = artistInfo.artworkUrl60;
+    this.Artist = artistInfo.artistName;
+    this.Collection = artistInfo.collectionName;
+    this.CollectionPrice = artistInfo.collectionPrice;
+    this.Play = artistInfo.previewUrl;
+    this.Type = artistInfo.kind;
+    this.TrackPrice = artistInfo.trackPrice;
+    this.Explicit = artistInfo.trackExplicitness;
+    this.Genre = artistInfo.primaryGenreName;
+    this.Song = artistInfo.trackName;
+
+  };
+
+}); //end service
