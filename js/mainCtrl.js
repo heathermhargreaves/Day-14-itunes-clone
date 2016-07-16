@@ -33,7 +33,7 @@ angular.module('itunes').controller('mainCtrl', function($scope, itunesService){
     $scope.getSongData = function(artist) {
       console.log(artist);
       itunesService.getArtist(artist).then(function(response) {
-        $scope.songData = response;
+         $scope.songData = response;
       });
     };
 
@@ -61,4 +61,5 @@ angular.module('itunes').controller('mainCtrl', function($scope, itunesService){
   //Once you have that final data array, you simply need to put it on the scope (or more specifically on the scope as songData). Once you do this ($scope.songData = myFinalArray) then ng-grid will see that and populate the page.
 
     //Code here
+
 });
